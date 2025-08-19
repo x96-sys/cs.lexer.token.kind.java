@@ -99,7 +99,7 @@ class MakeJavaEnum
 end
 
 m = MakeJavaEnum.new(kinds)
-m.pkg = "org.x96.sys.foundation.tokenizer.token"
+m.pkg = "org.x96.sys.foundation.cs.lexer.token"
 m.imports << "java.util.Arrays"
 m.name = "Kind"
 m.pretty_print

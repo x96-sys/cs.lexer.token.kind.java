@@ -1,10 +1,11 @@
-package org.x96.sys.foundation;
+package org.x96.sys.foundation.cs;
 
-import org.x96.sys.foundation.tokenizer.token.BuildInfo;
-import org.x96.sys.foundation.tokenizer.token.Kind;
+import org.x96.sys.foundation.cs.lexer.token.BuildInfo;
+import org.x96.sys.foundation.cs.lexer.token.Kind;
+
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class CLI {
     public static void main(String[] args) {
@@ -44,7 +45,8 @@ public class CLI {
         System.out.println(
                 "Usage: java -cp build/main:build/cli org.x96.sys.foundation.CLI <text>");
         System.out.println("java -jar org.x96.sys.foundation.tokenizer.kind.cli.jar \"<text>\"");
-        System.out.println("cat README.md | java -jar org.x96.sys.foundation.tokenizer.kind.cli.jar --stdin");
+        System.out.println(
+                "cat README.md | java -jar org.x96.sys.foundation.tokenizer.kind.cli.jar --stdin");
         System.out.println("Options:");
         System.out.println("  -v, --version     Show version");
         System.out.println("  -b, --build-info  Show build information");

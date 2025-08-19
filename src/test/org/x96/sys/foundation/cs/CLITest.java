@@ -1,11 +1,11 @@
-package org.x96.sys.foundation;
+package org.x96.sys.foundation.cs;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.x96.sys.foundation.tokenizer.token.BuildInfo;
+import org.x96.sys.foundation.cs.lexer.token.BuildInfo;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -95,7 +95,7 @@ public class CLITest {
         String input = "test\n";
         ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
         System.setIn(testIn);
-        
+
         CLI.main(new String[] {});
         String output = outContent.toString();
         assertFalse(output.isEmpty());
@@ -109,7 +109,7 @@ public class CLITest {
         String input = "hello\n";
         ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
         System.setIn(testIn);
-        
+
         CLI.main(new String[] {"--stdin"});
         String output = outContent.toString();
         assertFalse(output.isEmpty());
@@ -143,7 +143,7 @@ public class CLITest {
         String input = "";
         ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
         System.setIn(testIn);
-        
+
         CLI.main(new String[] {});
         String output = outContent.toString();
         // Com stdin vazio, não deve ter saída
@@ -156,12 +156,15 @@ public class CLITest {
         String input = "line1\nline2\nline3\n";
         ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
         System.setIn(testIn);
-        
+
         CLI.main(new String[] {});
         String output = outContent.toString();
         assertFalse(output.isEmpty());
         // Deve processar todas as linhas
-        assertTrue(output.contains("LATIN_SMALL_LETTER_L") || output.contains("is")); // linha contém 'l' ou resultado do Kind.is
+        assertTrue(
+                output.contains("LATIN_SMALL_LETTER_L")
+                        || output.contains("is")); // linha contém 'l' ou resultado
+        // do Kind.is
     }
 
     @Test
@@ -197,17 +200,18 @@ public class CLITest {
     public void testIOExceptionHandling() {
         // Testa o tratamento de IOException no processStdin
         // Simula um InputStream que sempre lança IOException
-        InputStream problematicIn = new InputStream() {
-            @Override
-            public int read() throws IOException {
-                throw new IOException("Simulated IO error");
-            }
-        };
-        
+        InputStream problematicIn =
+                new InputStream() {
+                    @Override
+                    public int read() throws IOException {
+                        throw new IOException("Simulated IO error");
+                    }
+                };
+
         System.setIn(problematicIn);
-        
+
         CLI.main(new String[] {"--stdin"});
-        
+
         String errorOutput = errContent.toString();
         assertTrue(errorOutput.contains("Error reading from stdin: Simulated IO error"));
     }
