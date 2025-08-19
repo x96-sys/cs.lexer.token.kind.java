@@ -64,5 +64,5 @@ class BuildInfo
 end
 
 # Uso
-pkg = "org.x96.sys.foundation.tokenizer.token"
+pkg = "org.x96.sys.foundation.cs.lexer.token"
 BuildInfo.new(pkg).generate

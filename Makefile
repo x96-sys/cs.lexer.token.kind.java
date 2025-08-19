@@ -3,14 +3,14 @@ MAIN_BUILD    = $(BUILD_DIR)/main
 CLI_BUILD     = $(BUILD_DIR)/cli
 TEST_BUILD    = $(BUILD_DIR)/test
 
-TARGET_PATH   = src
+SRC_MAIN      = src/main
+SRC_CLI       = src/cli
+SRC_TEST      = src/test
 
-SRC_MAIN      = $(TARGET_PATH)/main
-SRC_CLI       = $(TARGET_PATH)/cli
-SRC_TEST      = $(TARGET_PATH)/test
-
-FOUNDATION      = $(SRC_MAIN)/org/x96/sys/foundation
-FOUNDATION_TEST = $(SRC_TEST)/org/x96/sys/foundation
+FOUNDATION      = /org/x96/sys/foundation/cs/lexer/token
+FOUNDATION_MAIN = $(SRC_MAIN)/$(FOUNDATION)
+FOUNDATION_CLI  = $(SRC_CLI)/$(FOUNDATION)
+FOUNDATION_TEST = $(SRC_TEST)/$(FOUNDATION)
 
 TOOL_DIR      = tools
 LIB_DIR       = lib
@@ -31,27 +31,27 @@ GJF_URL       = https://maven.org/maven2/com/google/googlejavaformat/google-java
 JAVA_SOURCES       = $(shell find $(SRC_MAIN) -name "*.java")
 JAVA_TEST_SOURCES  = $(shell find $(SRC_TEST) -name "*.java")
 
-DISTRO_JAR = org.x96.sys.foundation.tokenizer.kind.jar
-CLI_JAR = org.x96.sys.foundation.tokenizer.kind.cli.jar
+DISTRO_JAR = org.x96.sys.foundation.cs.lexer.token.kind.jar
+CLI_JAR    = org.x96.sys.foundation.cs.lexer.token.kind.cli.jar
 
 f:
-	@mkdir -p $(FOUNDATION)/tokenizer/token/
+	@mkdir -p $(FOUNDATION_MAIN)
 ft:
-	@mkdir -p $(FOUNDATION_TEST)/tokenizer/token/
+	@mkdir -p $(FOUNDATION_TEST)
 
 gen/java/kind: f
 	@echo "[🔧] [kind] Generating..."
-	@ruby scripts/kind.rb > $(FOUNDATION)/tokenizer/token/Kind.java
+	@ruby scripts/kind.rb > $(FOUNDATION_MAIN)/Kind.java
 	@echo "[✅] [kind] Generated successfully!"
 
 gen/java/kind/info: f
 	@echo "[🔧] [kind] Generating..."
-	@ruby scripts/build_info.rb > $(FOUNDATION)/tokenizer/token/BuildInfo.java
+	@ruby scripts/build_info.rb > $(FOUNDATION_MAIN)/BuildInfo.java
 	@echo "[✅] [kind] Generated successfully!"
 
 gen/java/kind/test: ft
 	@echo "[🔧] [kind] Generating KindTest..."
-	@ruby scripts/kind_test.rb > $(FOUNDATION_TEST)/tokenizer/token/KindTest.java
+	@ruby scripts/kind_test.rb > $(FOUNDATION_TEST)/KindTest.java
 	@echo "[✅] [kind] Generated successfully!"
 
 # gen/java/kind gen/java/kind/info
@@ -65,12 +65,12 @@ build-cli:
 	@echo "[🔨] [build] Compiling..."
 	@mkdir -p $(CLI_BUILD)
 	@javac -cp $(MAIN_BUILD) -d $(CLI_BUILD) \
-	    $(SRC_CLI)/org/x96/sys/foundation/CLI.java
+	    $(SRC_CLI)/org/x96/sys/foundation/cs/CLI.java
 	@echo "[✅] [build] Compiled successfully! in [$(CLI_BUILD)]"
 
 #  build-cli
 cli:
-	@java -cp $(MAIN_BUILD):$(CLI_BUILD) org.x96.sys.foundation.CLI $(ARGS)
+	@java -cp $(MAIN_BUILD):$(CLI_BUILD) org.x96.sys.foundation.cs.CLI $(ARGS)
 
 build-test: build build-cli tools/junit
 	@echo "[🔨] [build] Compiling..."
@@ -125,34 +125,37 @@ tools:
 
 tools/junit: tools
 	@if [ ! -f $(JUNIT_JAR) ]; then \
-       echo "[📦] Baixando JUnit..."; \
+       echo "[📦] [🚛] [junit]@[$(JUNIT_VERSION)]"; \
        curl -s -L -o $(JUNIT_JAR) $(JUNIT_URL); \
     else \
-       echo "[✅] JUnit já está em $(JUNIT_JAR)"; \
+       echo "[📦] [📍] [junit]@[$(JUNIT_VERSION)]"; \
     fi
 
 tools/jacoco: tools
 	@if [ ! -f $(JACOCO_CLI) ] || [ ! -f $(JACOCO_AGENT) ]; then \
-       echo "[📦] Baixando JaCoCo..."; \
+       echo "[📦] [🚛] [JaCoCo]@[$(JACOCO_VERSION)]"; \
        curl -s -L -o $(JACOCO_CLI) $(JACOCO_BASE)/org.jacoco.cli/$(JACOCO_VERSION)/org.jacoco.cli-$(JACOCO_VERSION)-nodeps.jar && \
        curl -s -L -o $(JACOCO_AGENT) $(JACOCO_BASE)/org.jacoco.agent/$(JACOCO_VERSION)/org.jacoco.agent-$(JACOCO_VERSION)-runtime.jar; \
     else \
-       echo "[✅] JaCoCo já está em tools/"; \
+       echo "[📦] [📍] [JaCoCo]@[$(JACOCO_VERSION)]"; \
     fi
 
 tools/gjf:
 	@if [ ! -f $(GJF_JAR) ]; then \
-      echo "[📦] Baixando Google Java Format..."; \
+      echo "[📦] [🚛] [Google Java Format]@[$(GJF_VERSION)]"; \
       curl -s -L -o $(GJF_JAR) $(GJF_URL); \
     else \
-      echo "[✅] Google Java Format já está em $(GJF_JAR)"; \
+      echo "[📦] [📍] [Google Java Format]@[$(GJF_VERSION)]"; \
     fi
 
 clean:
-	@rm -rf $(FOUNDATION)/tokenizer/token/{BuildInfo,Kind}.java
-	@rm -rf $(FOUNDATION_TEST)/tokenizer/token/KindTest.java
+	@rm -rf $(FOUNDATION)/{BuildInfo,Kind}.java
+	@rm -rf $(FOUNDATION_TEST)/KindTest.java
 	@rm -rf $(BUILD_DIR)
 	@rm -rf $(TOOL_DIR)
 	@rm -rf $(LIB_DIR)
 	@rm -rf *.jar
 	@echo "[🧹] [clean] Build directory cleaned."
+
+.PHONY: all clean gen/java/kind gen/java/kind/test gen/java/kind/info build build-cli tools/junit build-test test tools/jacoco coverage distro distro-cli
+all: clean gen/java/kind gen/java/kind/test gen/java/kind/info build build-cli tools/junit build-test test tools/jacoco coverage distro distro-cli
