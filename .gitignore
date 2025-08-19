@@ -1,0 +1,8 @@
+build
+tools
+
+src/main/org/x96/sys/foundation/tokenizer/token/BuildInfo.java
+src/main/org/x96/sys/foundation/tokenizer/token/Kind.java
+src/test/org/x96/sys/foundation/tokenizer/token/KindTest.java
+
+*.jar
