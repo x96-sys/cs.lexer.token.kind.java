@@ -1,11 +1,12 @@
-package org.x96.sys.foundation.cs;
+package org.x96.sys.lexer.token.kind.cli;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.x96.sys.foundation.cs.lexer.token.BuildInfo;
+import org.x96.sys.lexer.token.BuildInfo;
+import org.x96.sys.lexer.token.kind.cli.CLI;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -59,7 +60,6 @@ public class CLITest {
         assertTrue(output.contains("Major: " + BuildInfo.VERSION_MAJOR));
         assertTrue(output.contains("Minor: " + BuildInfo.VERSION_MINOR));
         assertTrue(output.contains("Patch: " + BuildInfo.VERSION_PATCH));
-        assertTrue(output.contains("Full: " + BuildInfo.getFullVersion()));
     }
 
     @Test
@@ -197,7 +197,7 @@ public class CLITest {
     }
 
     @Test
-    public void testIOExceptionHandling() {
+    void testIOExceptionHandling() {
         // Testa o tratamento de IOException no processStdin
         // Simula um InputStream que sempre lança IOException
         InputStream problematicIn =

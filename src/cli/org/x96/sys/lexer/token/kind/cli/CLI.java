@@ -1,7 +1,7 @@
-package org.x96.sys.foundation.cs;
+package org.x96.sys.lexer.token.kind.cli;
 
-import org.x96.sys.foundation.cs.lexer.token.BuildInfo;
-import org.x96.sys.foundation.cs.lexer.token.Kind;
+import org.x96.sys.lexer.token.BuildInfo;
+import org.x96.sys.lexer.token.Kind;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,6 +81,5 @@ public class CLI {
         System.out.println("  Major: " + BuildInfo.VERSION_MAJOR);
         System.out.println("  Minor: " + BuildInfo.VERSION_MINOR);
         System.out.println("  Patch: " + BuildInfo.VERSION_PATCH);
-        System.out.println("  Full: " + BuildInfo.getFullVersion());
     }
 }

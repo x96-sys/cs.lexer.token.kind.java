@@ -1,8 +1,13 @@
-build
+out
 tools
 
-src/main/org/x96/sys/foundation/cs/lexer/token/BuildInfo.java
-src/main/org/x96/sys/foundation/cs/lexer/token/Kind.java
-src/test/org/x96/sys/foundation/cs/lexer/token/KindTest.java
+src/main/org/x96/sys/lexer/token/BuildInfo.java
+src/main/org/x96/sys/lexer/token/Kind.java
+src/test/org/x96/sys/lexer/token/KindTest.java
 
 *.jar
+/nbproject/private/
+.idea
+build.xml
+lib
+*.iml
