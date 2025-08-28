@@ -130,6 +130,16 @@ $(eval $(call deps,$(TOOLS_DIR),jacoco_agent,JACOCO_AGENT))
 $(TOOLS_DIR) $(COVERAGE_REPORT):
 	@mkdir -p $@
 
+distro:
+	@jar cf $(DISTRO_JAR) -C $(MAIN_BUILD) .
+	@echo "[📦] [lib] criada com sucesso! $(DISTRO_JAR)"
+
+distro/cli:
+	@echo "Main-Class: $(CLI_CLASS)" > manifest.txt
+	@jar cfm $(CLI_JAR) manifest.txt -C $(CLI_BUILD) . -C $(MAIN_BUILD) .
+	@rm manifest.txt
+	@echo "[📦] [cli] Empacotado com sucesso em $(CLI_JAR)"
+
 clean/kit:
 	@rm -rf $(TOOLS_DIR)
 	@echo "[🛀] [clean] [$(TOOLS_DIR)]"
